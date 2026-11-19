@@ -2,7 +2,7 @@
 import math
 from pathlib import Path
 
-V = 22
+V = 23
 OUT = Path(__file__).parent
 
 REASSURE = "Free 30-minute call — no commitment."
@@ -793,10 +793,10 @@ SCRUB = (
 
 STU_D = f"""
   <section class="bg-glow hero">
-    <div class="wrap hero-grid vid" style="align-items:center">
+    <div class="wrap hero-grid" style="align-items:center">
       <div>
         <p class="eyebrow" style="color:var(--blue-deep)">Virtual · high school &amp; college</p>
-        <h1>Executive Function Coaching for Students — from wherever you are.</h1>
+        <h1 style="max-width:15ch">Executive Function Coaching for Students — from wherever you are.</h1>
         <p class="beat on-light">You don’t have to figure it out alone at your desk.</p>
         <p class="beat-support on-light">One-on-one video sessions on this week’s real assignments: screens shared, the week planned, and the first step started together.</p>
         {cta()}
@@ -886,7 +886,7 @@ BODIES = {
     "student-a-define.html": (HERO_SPLIT_CSS, STU_A),
     "student-b-skills.html": (HERO_SPLIT_CSS + FORM_BESIDE_CSS, STU_B),
     "student-c-process.html": (PHOTO_CSS + FORM_BESIDE_CSS, STU_C),
-    "student-d-video.html": (HERO_SPLIT_CSS + FORM_BESIDE_CSS + VID_CSS, STU_D),
+    "student-d-video.html": (HERO_SPLIT_CSS + FORM_BESIDE_CSS, STU_D),
 }
 
 for fname, label, group in PAGES:

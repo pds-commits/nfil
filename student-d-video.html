@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="_shared.css?v=22">
+  <link rel="stylesheet" href="_shared.css?v=23">
   <style>
 .hero{padding:clamp(2.75rem,6vw,4.75rem) 0 clamp(3.5rem,7vw,6rem)}
 .hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(28px,5vw,64px);align-items:start}
@@ -19,12 +19,6 @@
 .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:center}
 .two.wide-r{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}
 @media(max-width:900px){.form-grid,.two,.two.wide-r{grid-template-columns:minmax(0,1fr)}}
-
-.hero-grid.vid{grid-template-columns:minmax(0,.82fr) minmax(0,1.3fr);gap:clamp(28px,4vw,56px)}
-.hero-grid.vid h1{font-size:clamp(2rem,3.5vw,2.85rem);max-width:none}
-.hero-grid.vid .beat{font-size:clamp(1.1rem,1.8vw,1.3rem)}
-@media(min-width:1200px){.hero-grid.vid .hero-video{margin-right:-90px}}
-@media(max-width:900px){.hero-grid.vid{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -44,10 +38,10 @@
   </header>
 
   <section class="bg-glow hero">
-    <div class="wrap hero-grid vid" style="align-items:center">
+    <div class="wrap hero-grid" style="align-items:center">
       <div>
         <p class="eyebrow" style="color:var(--blue-deep)">Virtual · high school &amp; college</p>
-        <h1>Executive Function Coaching for Students — from wherever you are.</h1>
+        <h1 style="max-width:15ch">Executive Function Coaching for Students — from wherever you are.</h1>
         <p class="beat on-light">You don’t have to figure it out alone at your desk.</p>
         <p class="beat-support on-light">One-on-one video sessions on this week’s real assignments: screens shared, the week planned, and the first step started together.</p>
         <div class="cta-stack">
