@@ -530,6 +530,8 @@
       `).join("");
     }
 
+    let apiMode = "pages"; // pages | direct | agent_bridge
+
     async function pollJob(jobId) {
       const started = Date.now();
       while (Date.now() - started < 90000) {
@@ -539,7 +541,28 @@
         if (data.status === "failed") throw new Error(data.error || "Stripe create failed");
         await new Promise((r) => setTimeout(r, 900));
       }
-      throw new Error("Timed out waiting for Checkout Session. Ask the agent to process the queue.");
+      throw new Error("Timed out waiting for Checkout Session.");
+    }
+
+    function simulateCreate(calc, engagementId) {
+      const sessionId = "cs_test_demo_" + Math.random().toString(36).slice(2, 10);
+      const row = {
+        created: new Date().toLocaleString(),
+        offer: calc.hours + "h · " + $("payPlan").value + (calc.discount ? " · $" + calc.discount + " off" : ""),
+        amount: money(calc.total),
+        clientReferenceId: engagementId,
+        url: "#demo-checkout",
+        sessionId: sessionId + " (preview)"
+      };
+      state.links.unshift(row);
+      renderLinks();
+      setStatus(
+        "ok",
+        "Preview only (GitHub Pages has no Stripe server).<br>" +
+        "Would create a Checkout Session for <strong>" + money(calc.total) + "</strong> with " +
+        "<code>client_reference_id = " + engagementId + "</code>.<br>" +
+        "Related list updated below so you can see the CRM shape. Live Stripe create needs the local <code>server.py</code>."
+      );
     }
 
     $("createBtn").addEventListener("click", async () => {
@@ -560,8 +583,14 @@
 
       const btn = $("createBtn");
       btn.disabled = true;
-      setStatus("info", "Creating Checkout Session in Stripe test mode…");
 
+      if (apiMode === "pages") {
+        simulateCreate(calc, engagementId);
+        btn.disabled = false;
+        return;
+      }
+
+      setStatus("info", "Creating Checkout Session in Stripe test mode…");
       try {
         const payload = {
           engagement_id: engagementId,
@@ -602,14 +631,25 @@
       }
     });
 
+    function setBadge(text) {
+      const badge = document.querySelector(".topbar .badge");
+      if (badge) badge.textContent = text;
+    }
+
     recalc();
     renderLinks();
-    fetch("/api/health").then(r => r.json()).then(h => {
-      const badge = document.querySelector(".topbar .badge");
-      if (badge && h.mode) badge.textContent = h.mode === "direct"
-        ? "Test mode · direct Stripe"
-        : "Test mode · set local STRIPE_SECRET_KEY to create sessions";
-    }).catch(() => {});
+    fetch("/api/health")
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((h) => {
+        apiMode = h.mode === "direct" ? "direct" : "agent_bridge";
+        setBadge(apiMode === "direct"
+          ? "Local · live Stripe test create"
+          : "Local · set STRIPE_SECRET_KEY for live create");
+      })
+      .catch(() => {
+        apiMode = "pages";
+        setBadge("GitHub Pages · interactive preview");
+      });
   </script>
 </body>
 </html>

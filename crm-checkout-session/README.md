@@ -2,6 +2,14 @@
 
 Small Zoho CRM–style mock that shows how Account Managers could configure a flexible payment offer on an Engagement and create a **Stripe Checkout Session** on click — instead of picking a pre-built Payment Link from a catalog.
 
+## Share this (no install)
+
+Same pattern as the landing-page mocks:
+
+**https://pds-commits.github.io/nfil/crm-checkout-session/**
+
+Interactive preview in the browser. Create Payment Link updates the related list in **preview mode** (GitHub Pages cannot hold Stripe secrets). Design write-up: [SUMMARY.md](./SUMMARY.md).
+
 ## What it demonstrates
 
 - Offer fields on the Deal: pay plan, hours, unit rate, discount

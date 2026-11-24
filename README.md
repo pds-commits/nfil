@@ -9,7 +9,8 @@ Public scratchpad for New Frontiers experiments.
 
 ## Checkout session design (share this)
 
+- **Open the mock (GitHub Pages):** https://pds-commits.github.io/nfil/crm-checkout-session/
 - **Summary (architecture, data flow, webhooks, migration):** [crm-checkout-session/SUMMARY.md](./crm-checkout-session/SUMMARY.md)
-- **Run the interactive mock:** [crm-checkout-session/README.md](./crm-checkout-session/README.md)
+- **Local live Stripe create (optional):** [crm-checkout-session/README.md](./crm-checkout-session/README.md)
 
 No API keys or secrets belong in this repo. Use local env only.

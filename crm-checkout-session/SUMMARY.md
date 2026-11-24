@@ -2,7 +2,9 @@
 
 Shared notes from the working session on replacing rigid Stripe **Payment Links** with per-deal **Checkout Sessions**, while keeping Zoho Flow able to resolve the Engagement.
 
-**Demo mock in this folder:** open `README.md` to run the CRM-style UI locally.
+**Live preview (share this):** https://pds-commits.github.io/nfil/crm-checkout-session/  
+
+**Design + run notes:** this file + `README.md`.
 
 ---
 
