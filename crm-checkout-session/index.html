@@ -328,9 +328,9 @@
   </style>
 </head>
 <body>
-  <div class="topbar">
+    <div class="topbar">
     <div class="brand">Zoho CRM · New Frontiers (mock)</div>
-    <div class="badge">Test mode · Checkout Session demo</div>
+    <div class="badge">GitHub Pages · interactive preview</div>
   </div>
 
   <div class="shell">
@@ -417,8 +417,13 @@
 
         <div class="actions">
           <button class="primary" id="createBtn" type="button">Create Payment Link</button>
+          <a class="primary" id="sampleCheckoutBtn" href="https://buy.stripe.com/test_00weVd3yd5Ti7d3eQ88IU01?client_reference_id=5092000002817451" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;line-height:1.2">Open sample Stripe checkout</a>
           <button class="ghost" id="resetBtn" type="button">Reset demo values</button>
         </div>
+        <p class="help" style="margin:8px 0 0;color:var(--mute);font-size:0.78rem;line-height:1.4">
+          <strong>Open sample</strong> opens a real Stripe test checkout ($1,600 = 12h × $150 − $200) with <code>client_reference_id</code> on the URL for this demo engagement. Use test card <code>4242 4242 4242 4242</code>.
+          On GitHub Pages, <strong>Create</strong> only previews the CRM related list (no secrets in static hosting).
+        </p>
         <div class="status" id="status"></div>
       </section>
 
@@ -462,7 +467,17 @@
     const $ = (id) => document.getElementById(id);
     const money = (n) => n.toLocaleString("en-US", { style: "currency", currency: "USD" });
 
-    const state = { links: [] };
+    const SAMPLE_CHECKOUT_URL = "https://buy.stripe.com/test_00weVd3yd5Ti7d3eQ88IU01?client_reference_id=5092000002817451";
+    const state = {
+      links: [{
+        created: "Sample (always available)",
+        offer: "12h · Per Hour · $200 off",
+        amount: "$1,600.00",
+        clientReferenceId: "5092000002817451",
+        url: SAMPLE_CHECKOUT_URL,
+        sessionId: "sample hosted checkout (test mode)"
+      }]
+    };
 
     function parseNum(el) {
       const n = Number(el.value);
@@ -558,10 +573,9 @@
       renderLinks();
       setStatus(
         "ok",
-        "Preview only (GitHub Pages has no Stripe server).<br>" +
-        "Would create a Checkout Session for <strong>" + money(calc.total) + "</strong> with " +
+        "CRM preview updated for <strong>" + money(calc.total) + "</strong> · " +
         "<code>client_reference_id = " + engagementId + "</code>.<br>" +
-        "Related list updated below so you can see the CRM shape. Live Stripe create needs the local <code>server.py</code>."
+        "To see the real Stripe page, use <a href=\"" + SAMPLE_CHECKOUT_URL + "\" target=\"_blank\" rel=\"noopener\">Open sample Stripe checkout</a>."
       );
     }
 

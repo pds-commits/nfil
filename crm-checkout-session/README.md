@@ -8,7 +8,7 @@ Same pattern as the landing-page mocks:
 
 **https://pds-commits.github.io/nfil/crm-checkout-session/**
 
-Interactive preview in the browser. Create Payment Link updates the related list in **preview mode** (GitHub Pages cannot hold Stripe secrets). Design write-up: [SUMMARY.md](./SUMMARY.md).
+Interactive CRM preview in the browser. Use **Open sample Stripe checkout** for a real Stripe test checkout ($1,600 demo). Create Payment Link updates the related list in preview mode (GitHub Pages cannot hold Stripe secrets). Design write-up: [SUMMARY.md](./SUMMARY.md).
 
 ## What it demonstrates
 
