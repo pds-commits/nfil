@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CRM mock · Create Checkout Session</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #eef1f6;
+      --panel: #ffffff;
+      --ink: #1f2937;
+      --mute: #6b7280;
+      --line: #d8dee8;
+      --blue: #0b5fff;
+      --blue-deep: #0847c7;
+      --blue-soft: #e8f0ff;
+      --green: #0f7b4a;
+      --green-soft: #e7f6ee;
+      --amber: #9a6700;
+      --amber-soft: #fff6d9;
+      --danger: #b42318;
+      --radius: 8px;
+      --shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 8px 24px rgba(16, 24, 40, 0.04);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, #e7edf7 0%, var(--bg) 180px),
+        var(--bg);
+      min-height: 100vh;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 22px;
+      background: #0f2748;
+      color: #e8eef8;
+    }
+    .topbar .brand {
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      font-size: 0.95rem;
+    }
+    .topbar .badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #1d4f91;
+      padding: 5px 9px;
+      border-radius: 999px;
+    }
+    .shell {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 22px 18px 48px;
+    }
+    .breadcrumb {
+      font-size: 0.82rem;
+      color: var(--mute);
+      margin-bottom: 10px;
+    }
+    .breadcrumb strong { color: var(--ink); font-weight: 500; }
+    .deal-header {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px 20px;
+      display: grid;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .deal-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .deal-title-row h1 {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 650;
+      letter-spacing: -0.01em;
+    }
+    .stage {
+      font-size: 0.75rem;
+      font-weight: 650;
+      color: var(--green);
+      background: var(--green-soft);
+      border: 1px solid #b7e0c8;
+      padding: 5px 10px;
+      border-radius: 999px;
+    }
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px 16px;
+      font-size: 0.86rem;
+    }
+    .meta dt { color: var(--mute); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+    .meta dd { margin: 0; font-weight: 500; }
+    .layout {
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr;
+      gap: 16px;
+    }
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px 18px 18px;
+    }
+    .panel h2 {
+      margin: 0 0 4px;
+      font-size: 0.98rem;
+      font-weight: 650;
+    }
+    .panel .hint {
+      margin: 0 0 14px;
+      color: var(--mute);
+      font-size: 0.84rem;
+      line-height: 1.4;
+    }
+    .field {
+      display: grid;
+      gap: 5px;
+      margin-bottom: 12px;
+    }
+    .field label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #374151;
+    }
+    .field .help {
+      font-size: 0.74rem;
+      color: var(--mute);
+      margin-top: -2px;
+    }
+    input, select {
+      width: 100%;
+      border: 1px solid #c5cedc;
+      border-radius: 6px;
+      padding: 9px 10px;
+      font: inherit;
+      font-size: 0.92rem;
+      color: var(--ink);
+      background: #fff;
+    }
+    input:focus, select:focus {
+      outline: 2px solid #bfd0ff;
+      border-color: var(--blue);
+    }
+    input[readonly] {
+      background: #f5f7fb;
+      color: #4b5563;
+    }
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .totals {
+      margin-top: 6px;
+      border-top: 1px dashed var(--line);
+      padding-top: 12px;
+      display: grid;
+      gap: 6px;
+      font-size: 0.9rem;
+    }
+    .totals .line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--mute);
+    }
+    .totals .line strong {
+      color: var(--ink);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .totals .final {
+      margin-top: 4px;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      font-size: 1rem;
+      color: var(--ink);
+      font-weight: 650;
+    }
+    .ref-box {
+      margin-top: 12px;
+      background: #f7f9fc;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 0.8rem;
+    }
+    .ref-box code {
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: 0.78rem;
+      background: #eef2f8;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    button {
+      font: inherit;
+      font-weight: 600;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      padding: 10px 14px;
+      cursor: pointer;
+    }
+    button.primary {
+      background: var(--blue);
+      color: #fff;
+    }
+    button.primary:hover { background: var(--blue-deep); }
+    button.primary:disabled {
+      opacity: 0.55;
+      cursor: wait;
+    }
+    button.ghost {
+      background: #fff;
+      border-color: var(--line);
+      color: #374151;
+    }
+    .status {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      line-height: 1.4;
+      display: none;
+    }
+    .status.show { display: block; }
+    .status.info { background: var(--blue-soft); color: #163a8a; border: 1px solid #c5d7ff; }
+    .status.ok { background: var(--green-soft); color: #0f5c38; border: 1px solid #b7e0c8; }
+    .status.err { background: #fef3f2; color: var(--danger); border: 1px solid #fecdca; }
+    .status a { color: inherit; font-weight: 650; word-break: break-all; }
+    .side .chip {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 650;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--amber);
+      background: var(--amber-soft);
+      border: 1px solid #f0d78c;
+      padding: 4px 8px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    .side ol {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--mute);
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+    .side li { margin-bottom: 8px; }
+    .side li strong { color: var(--ink); font-weight: 600; }
+    .related {
+      margin-top: 16px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .related header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #f8fafc;
+    }
+    .related header h2 {
+      margin: 0;
+      font-size: 0.92rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #edf0f5;
+      vertical-align: top;
+    }
+    th {
+      color: var(--mute);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 650;
+      background: #fcfdff;
+    }
+    td a { color: var(--blue); font-weight: 500; word-break: break-all; }
+    .empty {
+      padding: 22px 16px;
+      color: var(--mute);
+      font-size: 0.88rem;
+      text-align: center;
+    }
+    .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.78rem; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">Zoho CRM · New Frontiers (mock)</div>
+    <div class="badge">Test mode · Checkout Session demo</div>
+  </div>
+
+  <div class="shell">
+    <div class="breadcrumb">Deals / Engagements / <strong id="crumbName">Alex Rivera — Flex coaching</strong></div>
+
+    <section class="deal-header">
+      <div class="deal-title-row">
+        <h1 id="dealName">Alex Rivera — Flex coaching</h1>
+        <span class="stage">Proposal / negotiation</span>
+      </div>
+      <dl class="meta">
+        <div>
+          <dt>Engagement ID</dt>
+          <dd class="mono" id="engagementDisplay">5092000002817451</dd>
+        </div>
+        <div>
+          <dt>Contact</dt>
+          <dd>Alex Rivera</dd>
+        </div>
+        <div>
+          <dt>Owner</dt>
+          <dd>Account Manager</dd>
+        </div>
+        <div>
+          <dt>Payment model</dt>
+          <dd>Dynamic Checkout Session (not catalog Payment Link)</dd>
+        </div>
+      </dl>
+    </section>
+
+    <div class="layout">
+      <section class="panel">
+        <h2>Payment offer</h2>
+        <p class="hint">Configure what sales agreed with the client. Create builds a Stripe Checkout Session and sets <code>client_reference_id</code> to this engagement id — same hook your live Flow already uses.</p>
+
+        <div class="field">
+          <label for="engagementId">Engagement ID → client_reference_id</label>
+          <input id="engagementId" value="5092000002817451" autocomplete="off">
+          <div class="help">Same Deal id your current button appends today.</div>
+        </div>
+
+        <div class="field">
+          <label for="payPlan">Pay plan</label>
+          <select id="payPlan">
+            <option value="Per Hour" data-rate="150" selected>Per Hour (Flex block)</option>
+            <option value="Weekly Subscription" data-rate="160">Weekly Subscription</option>
+            <option value="Monthly Subscription" data-rate="145">Monthly Subscription</option>
+          </select>
+        </div>
+
+        <div class="row-2">
+          <div class="field">
+            <label for="hours">Amount of hours</label>
+            <input id="hours" type="number" min="0.25" step="0.25" value="12">
+          </div>
+          <div class="field">
+            <label for="unitRate">Unit rate (USD)</label>
+            <input id="unitRate" type="number" min="1" step="1" value="150">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="discount">Discount amount (USD)</label>
+          <input id="discount" type="number" min="0" step="1" value="200">
+          <div class="help">Applied as a one-time Stripe coupon on the session (no promo code for the client to type).</div>
+        </div>
+
+        <div class="field">
+          <label for="customerEmail">Customer email (prefill)</label>
+          <input id="customerEmail" type="email" value="alex.rivera@example.com">
+        </div>
+
+        <div class="totals">
+          <div class="line"><span>Subtotal</span><strong id="subtotal">$1,800.00</strong></div>
+          <div class="line"><span>Discount</span><strong id="discountShown">−$200.00</strong></div>
+          <div class="line final"><span>Amount due</span><strong id="total">$1,600.00</strong></div>
+        </div>
+
+        <div class="ref-box">
+          Stripe will receive<br>
+          <code>client_reference_id = <span id="refPreview">5092000002817451</span></code><br>
+          plus metadata: engagement_id, pay_plan, hours, unit_rate, discount.
+        </div>
+
+        <div class="actions">
+          <button class="primary" id="createBtn" type="button">Create Payment Link</button>
+          <button class="ghost" id="resetBtn" type="button">Reset demo values</button>
+        </div>
+        <div class="status" id="status"></div>
+      </section>
+
+      <aside class="panel side">
+        <div class="chip">Why this shape</div>
+        <h2>Less disruption</h2>
+        <p class="hint">Keeps your existing payment-processing contract.</p>
+        <ol>
+          <li><strong>Same reference.</strong> Flow can still resolve the Deal via <code>client_reference_id</code>.</li>
+          <li><strong>No Stripe catalog link.</strong> Hours / rate / discount come from this offer, not a pre-built Payment Link row.</li>
+          <li><strong>Same CRM habit.</strong> AM still clicks “Create Payment Link” on the engagement.</li>
+          <li><strong>Related list.</strong> Session URL is saved here like today’s Payment Links module.</li>
+        </ol>
+      </aside>
+    </div>
+
+    <section class="related">
+      <header>
+        <h2>Payment Links (related list)</h2>
+        <span class="mono" id="linkCount">0 records</span>
+      </header>
+      <div id="linksEmpty" class="empty">No payment links yet. Configure the offer and click Create Payment Link.</div>
+      <div id="linksTableWrap" hidden>
+        <table>
+          <thead>
+            <tr>
+              <th>Created</th>
+              <th>Offer</th>
+              <th>Amount</th>
+              <th>client_reference_id</th>
+              <th>Checkout URL</th>
+            </tr>
+          </thead>
+          <tbody id="linksBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const money = (n) => n.toLocaleString("en-US", { style: "currency", currency: "USD" });
+
+    const state = { links: [] };
+
+    function parseNum(el) {
+      const n = Number(el.value);
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    function recalc() {
+      const hours = parseNum($("hours"));
+      const rate = parseNum($("unitRate"));
+      let discount = parseNum($("discount"));
+      const subtotal = Math.round(hours * rate * 100) / 100;
+      if (discount > subtotal) discount = subtotal;
+      const total = Math.round((subtotal - discount) * 100) / 100;
+      $("subtotal").textContent = money(subtotal);
+      $("discountShown").textContent = "−" + money(discount);
+      $("total").textContent = money(total);
+      $("refPreview").textContent = $("engagementId").value.trim() || "—";
+      $("engagementDisplay").textContent = $("engagementId").value.trim() || "—";
+      return { hours, rate, discount, subtotal, total };
+    }
+
+    $("payPlan").addEventListener("change", () => {
+      const opt = $("payPlan").selectedOptions[0];
+      if (opt && opt.dataset.rate) $("unitRate").value = opt.dataset.rate;
+      recalc();
+    });
+    ["engagementId", "hours", "unitRate", "discount"].forEach((id) => {
+      $(id).addEventListener("input", recalc);
+    });
+
+    $("resetBtn").addEventListener("click", () => {
+      $("engagementId").value = "5092000002817451";
+      $("payPlan").value = "Per Hour";
+      $("hours").value = "12";
+      $("unitRate").value = "150";
+      $("discount").value = "200";
+      $("customerEmail").value = "alex.rivera@example.com";
+      setStatus("", "");
+      recalc();
+    });
+
+    function setStatus(kind, html) {
+      const el = $("status");
+      el.className = "status" + (kind ? " show " + kind : "");
+      el.innerHTML = html || "";
+    }
+
+    function renderLinks() {
+      $("linkCount").textContent = state.links.length + (state.links.length === 1 ? " record" : " records");
+      if (!state.links.length) {
+        $("linksEmpty").hidden = false;
+        $("linksTableWrap").hidden = true;
+        return;
+      }
+      $("linksEmpty").hidden = true;
+      $("linksTableWrap").hidden = false;
+      $("linksBody").innerHTML = state.links.map((row) => `
+        <tr>
+          <td>${row.created}</td>
+          <td>${row.offer}<div class="help" style="color:var(--mute);font-size:0.74rem;margin-top:2px">${row.sessionId}</div></td>
+          <td>${row.amount}</td>
+          <td class="mono">${row.clientReferenceId}</td>
+          <td><a href="${row.url}" target="_blank" rel="noopener">Open checkout</a></td>
+        </tr>
+      `).join("");
+    }
+
+    async function pollJob(jobId) {
+      const started = Date.now();
+      while (Date.now() - started < 90000) {
+        const res = await fetch("/api/status/" + encodeURIComponent(jobId));
+        const data = await res.json();
+        if (data.status === "done") return data;
+        if (data.status === "failed") throw new Error(data.error || "Stripe create failed");
+        await new Promise((r) => setTimeout(r, 900));
+      }
+      throw new Error("Timed out waiting for Checkout Session. Ask the agent to process the queue.");
+    }
+
+    $("createBtn").addEventListener("click", async () => {
+      const calc = recalc();
+      const engagementId = $("engagementId").value.trim();
+      if (!engagementId) {
+        setStatus("err", "Engagement ID is required — it becomes client_reference_id.");
+        return;
+      }
+      if (calc.hours <= 0 || calc.rate <= 0) {
+        setStatus("err", "Hours and unit rate must be greater than zero.");
+        return;
+      }
+      if (calc.total <= 0) {
+        setStatus("err", "Amount due must be greater than zero.");
+        return;
+      }
+
+      const btn = $("createBtn");
+      btn.disabled = true;
+      setStatus("info", "Creating Checkout Session in Stripe test mode…");
+
+      try {
+        const payload = {
+          engagement_id: engagementId,
+          pay_plan: $("payPlan").value,
+          hours: calc.hours,
+          unit_rate: calc.rate,
+          discount: calc.discount,
+          customer_email: $("customerEmail").value.trim(),
+          product_name: "Executive Function Coaching — " + $("payPlan").value
+        };
+        const createRes = await fetch("/api/create-checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const created = await createRes.json();
+        if (!createRes.ok) throw new Error(created.error || "Request failed");
+
+        const done = await pollJob(created.job_id);
+        const row = {
+          created: new Date().toLocaleString(),
+          offer: calc.hours + "h · " + $("payPlan").value + (calc.discount ? " · $" + calc.discount + " off" : ""),
+          amount: money(calc.total),
+          clientReferenceId: engagementId,
+          url: done.url,
+          sessionId: done.session_id
+        };
+        state.links.unshift(row);
+        renderLinks();
+        setStatus(
+          "ok",
+          "Checkout Session created.<br><a href=\"" + done.url + "\" target=\"_blank\" rel=\"noopener\">Open checkout</a><br><span class=\"mono\">" + done.session_id + "</span> · client_reference_id = <span class=\"mono\">" + engagementId + "</span>"
+        );
+      } catch (err) {
+        setStatus("err", err.message || String(err));
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    recalc();
+    renderLinks();
+    fetch("/api/health").then(r => r.json()).then(h => {
+      const badge = document.querySelector(".topbar .badge");
+      if (badge && h.mode) badge.textContent = h.mode === "direct"
+        ? "Test mode · direct Stripe"
+        : "Test mode · set local STRIPE_SECRET_KEY to create sessions";
+    }).catch(() => {});
+  </script>
+</body>
+</html>

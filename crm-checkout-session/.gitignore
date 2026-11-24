@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+*.pem
+*secret*
+*credentials*
+queue/pending/*
+queue/done/*
+queue/failed/*
+!queue/pending/.gitkeep
+!queue/done/.gitkeep
+!queue/failed/.gitkeep
+__pycache__/
+*.pyc
+.DS_Store
